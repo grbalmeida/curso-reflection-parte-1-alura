@@ -31,7 +31,17 @@ namespace ByteBank.Portal.Controller
 
         public string USD()
         {
-            return null;
+            var valorFinal = _cambioService.Calcular("MXN", "BRL", 1);
+            var nomeCompletoResource = "ByteBank.Portal.View.Cambio.USD.html";
+            var assembly = Assembly.GetExecutingAssembly();
+            var streamRecurso = assembly.GetManifestResourceStream(nomeCompletoResource);
+
+            var streamLeitura = new StreamReader(streamRecurso);
+            var textoPagina = streamLeitura.ReadToEnd();
+
+            var textoResultado = textoPagina.Replace("VALOR_EM_REAIS", valorFinal.ToString());
+
+            return textoResultado;
         }
     }
 }

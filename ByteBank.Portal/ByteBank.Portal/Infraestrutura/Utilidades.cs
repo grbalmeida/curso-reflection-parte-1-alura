@@ -1,14 +1,26 @@
 ﻿using System;
+using System.Linq;
 
 namespace ByteBank.Portal.Infraestrutura
 {
     public static class Utilidades
     {
+        // /Assets/css/styles.css
+        // /Assets/js/main.js
+
+        public static bool EhArquivo(string path)
+        {
+            var partesPath = path.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+            var ultimaParte = partesPath.LastOrDefault();
+
+            if (ultimaParte == null)
+                return false;
+
+            return ultimaParte.Contains('.');
+        }
+
         public static string ConverterPathParaNomeAssembly(string path)
         {
-            // /Assets/css/styles.css
-            // /Assets/js/main.js
-
             var prefixoAssembly = "ByteBank.Portal";
             var pathComPontos = path.Replace('/', '.');
             var nomeCompleto = $"{prefixoAssembly}{pathComPontos}";

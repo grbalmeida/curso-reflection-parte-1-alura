@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ByteBank.Portal.Controller;
+using System;
 using System.Net;
 using System.Reflection;
 using System.Text;
@@ -42,28 +43,57 @@ namespace ByteBank.Portal.Infraestrutura
 
             var path = requisicao.Url.AbsolutePath;
 
-            var assembly = Assembly.GetExecutingAssembly();
-            var nomeResource = Utilidades.ConverterPathParaNomeAssembly(path);
-
-            var resourceStream = assembly.GetManifestResourceStream(nomeResource);
-            
-            if (resourceStream == null)
+            if (Utilidades.EhArquivo(path))
             {
-                resposta.StatusCode = (int)HttpStatusCode.NotFound;
+                var assembly = Assembly.GetExecutingAssembly();
+                var nomeResource = Utilidades.ConverterPathParaNomeAssembly(path);
+
+                var resourceStream = assembly.GetManifestResourceStream(nomeResource);
+
+                if (resourceStream == null)
+                {
+                    resposta.StatusCode = (int)HttpStatusCode.NotFound;
+                    resposta.OutputStream.Close();
+                }
+                else
+                {
+                    var bytesResource = new byte[resourceStream.Length];
+
+                    resourceStream.Read(bytesResource, 0, (int)resourceStream.Length);
+
+                    resposta.ContentType = Utilidades.ObterTipoDeConteudo(path);
+                    resposta.StatusCode = (int)HttpStatusCode.OK;
+                    resposta.ContentLength64 = resourceStream.Length;
+
+                    resposta.OutputStream.Write(bytesResource, 0, bytesResource.Length);
+
+                    resposta.OutputStream.Close();
+                }
+            }
+            else if (path == "/Cambio/MXN")
+            {
+                var controller = new CambioController();
+                var paginaConteudo = controller.MXN();
+
+                var bufferArquivo = Encoding.UTF8.GetBytes(paginaConteudo);
+                resposta.StatusCode = (int)HttpStatusCode.OK;
+                resposta.ContentType = "text/html; charset=utf-8";
+                resposta.ContentLength64 = bufferArquivo.Length;
+
+                resposta.OutputStream.Write(bufferArquivo, 0, bufferArquivo.Length);
                 resposta.OutputStream.Close();
             }
-            else
+            else if (path == "/Cambio/USD")
             {
-                var bytesResource = new byte[resourceStream.Length];
+                var controller = new CambioController();
+                var paginaConteudo = controller.USD();
 
-                resourceStream.Read(bytesResource, 0, (int)resourceStream.Length);
-
-                resposta.ContentType = Utilidades.ObterTipoDeConteudo(path);
+                var bufferArquivo = Encoding.UTF8.GetBytes(paginaConteudo);
                 resposta.StatusCode = (int)HttpStatusCode.OK;
-                resposta.ContentLength64 = resourceStream.Length;
+                resposta.ContentType = "text/html; charset=utf-8";
+                resposta.ContentLength64 = bufferArquivo.Length;
 
-                resposta.OutputStream.Write(bytesResource, 0, bytesResource.Length);
-
+                resposta.OutputStream.Write(bufferArquivo, 0, bufferArquivo.Length);
                 resposta.OutputStream.Close();
             }
 
