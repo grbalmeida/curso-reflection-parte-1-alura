@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ByteBank.Portal.Infraestrutura.Binding;
+using System;
 using System.Net;
 using System.Text;
 
@@ -6,6 +7,8 @@ namespace ByteBank.Portal.Infraestrutura
 {
     public class ManipuladorRequisicaoController
     {
+        private readonly ActionBinder _actionBinder = new ActionBinder();
+
         public void Manipular(HttpListenerResponse resposta, string path)
         {
             // Cambio/MXN
@@ -23,7 +26,8 @@ namespace ByteBank.Portal.Infraestrutura
             var controllerWrapper = Activator.CreateInstance("ByteBank.Portal", controllerNomeCompleto, new object[0]);
             var controller = controllerWrapper.Unwrap();
 
-            var methodInfo = controller.GetType().GetMethod(actionNome);
+            //var methodInfo = controller.GetType().GetMethod(actionNome);
+            var methodInfo = _actionBinder.ObterMethodInfo(controller, path);
 
             var resultadoAction = (string)methodInfo.Invoke(controller, new object[0]);
 

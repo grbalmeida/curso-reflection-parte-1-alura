@@ -52,5 +52,8 @@ namespace ByteBank.Portal.Controller
 
             return textoResultado;
         }
+
+        public string Calculo(string moedaDestino, decimal valor) =>
+            Calculo("BRL", moedaDestino, valor);
     }
 }
