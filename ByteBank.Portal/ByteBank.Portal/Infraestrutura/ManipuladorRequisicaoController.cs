@@ -27,7 +27,7 @@ namespace ByteBank.Portal.Infraestrutura
             var controller = controllerWrapper.Unwrap();
 
             //var methodInfo = controller.GetType().GetMethod(actionNome);
-            var methodInfo = _actionBinder.ObterMethodInfo(controller, path);
+            var methodInfo = _actionBinder.ObterActionBindInfo(controller, path);
 
             var resultadoAction = (string)methodInfo.Invoke(controller, new object[0]);
 
