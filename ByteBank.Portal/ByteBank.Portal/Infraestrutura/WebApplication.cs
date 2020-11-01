@@ -12,10 +12,7 @@ namespace ByteBank.Portal.Infraestrutura
 
         public WebApplication(string[] prefixos)
         {
-            if (prefixos == null)
-                throw new ArgumentNullException(nameof(prefixos));
-
-            _prefixos = prefixos;
+            _prefixos = prefixos ?? throw new ArgumentNullException(nameof(prefixos));
         }
 
         public void Iniciar()
@@ -41,7 +38,7 @@ namespace ByteBank.Portal.Infraestrutura
             var requisicao = contexto.Request;
             var resposta = contexto.Response;
 
-            var path = requisicao.Url.AbsolutePath;
+            var path = requisicao.Url.PathAndQuery;
 
             if (Utilidades.EhArquivo(path))
             {

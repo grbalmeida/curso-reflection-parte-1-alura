@@ -19,7 +19,6 @@ namespace ByteBank.Portal.Infraestrutura
 
             var partes = path.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
             var controllerNome = partes[0];
-            var actionNome = partes[1];
 
             var controllerNomeCompleto = $"ByteBank.Portal.Controller.{controllerNome}Controller";
 
@@ -29,7 +28,7 @@ namespace ByteBank.Portal.Infraestrutura
             //var methodInfo = controller.GetType().GetMethod(actionNome);
             var methodInfo = _actionBinder.ObterActionBindInfo(controller, path);
 
-            var resultadoAction = (string)methodInfo.Invoke(controller, new object[0]);
+            var resultadoAction = (string)methodInfo.Invoke(controller);
 
             var buffer = Encoding.UTF8.GetBytes(resultadoAction);
 
