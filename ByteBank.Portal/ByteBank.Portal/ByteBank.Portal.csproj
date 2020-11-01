@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Controller\CambioController.cs" />
     <Compile Include="Infraestrutura\ManipuladorRequisicaoArquivo.cs" />
+    <Compile Include="Infraestrutura\ManipuladorRequisicaoController.cs" />
     <Compile Include="Infraestrutura\Utilidades.cs" />
     <Compile Include="Infraestrutura\WebApplication.cs" />
     <Compile Include="Program.cs" />

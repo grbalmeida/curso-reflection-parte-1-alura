@@ -48,31 +48,10 @@ namespace ByteBank.Portal.Infraestrutura
                 var manipulador = new ManipuladorRequisicaoArquivo();
                 manipulador.Manipular(resposta, path);
             }
-            else if (path == "/Cambio/MXN")
+            else
             {
-                var controller = new CambioController();
-                var paginaConteudo = controller.MXN();
-
-                var bufferArquivo = Encoding.UTF8.GetBytes(paginaConteudo);
-                resposta.StatusCode = (int)HttpStatusCode.OK;
-                resposta.ContentType = "text/html; charset=utf-8";
-                resposta.ContentLength64 = bufferArquivo.Length;
-
-                resposta.OutputStream.Write(bufferArquivo, 0, bufferArquivo.Length);
-                resposta.OutputStream.Close();
-            }
-            else if (path == "/Cambio/USD")
-            {
-                var controller = new CambioController();
-                var paginaConteudo = controller.USD();
-
-                var bufferArquivo = Encoding.UTF8.GetBytes(paginaConteudo);
-                resposta.StatusCode = (int)HttpStatusCode.OK;
-                resposta.ContentType = "text/html; charset=utf-8";
-                resposta.ContentLength64 = bufferArquivo.Length;
-
-                resposta.OutputStream.Write(bufferArquivo, 0, bufferArquivo.Length);
-                resposta.OutputStream.Close();
+                var manipulador = new ManipuladorRequisicaoController();
+                manipulador.Manipular(resposta, path);
             }
 
             httpListener.Stop();
